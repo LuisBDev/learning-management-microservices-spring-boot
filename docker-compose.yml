@@ -1,0 +1,108 @@
+version: "3.9"
+
+services:
+  identity-db-v1:
+    image: postgres:16-alpine
+    container_name: identity-db-v1
+    environment:
+      POSTGRES_DB: identitydb
+      POSTGRES_USER: identityuser
+      POSTGRES_PASSWORD: identitypass
+    ports:
+      - "41010:5432"
+    volumes:
+      - identity_db_data:/var/lib/postgresql/data
+    networks:
+      - lms-network
+
+  course-db-v1:
+    image: postgres:16-alpine
+    container_name: course-db-v1
+    environment:
+      POSTGRES_DB: coursedb
+      POSTGRES_USER: courseuser
+      POSTGRES_PASSWORD: coursepass
+    ports:
+      - "41020:5432"
+    volumes:
+      - course_db_data:/var/lib/postgresql/data
+    networks:
+      - lms-network
+
+  enrollment-db-v1:
+    image: postgres:16-alpine
+    container_name: enrollment-db-v1
+    environment:
+      POSTGRES_DB: enrollmentdb
+      POSTGRES_USER: enrollmentuser
+      POSTGRES_PASSWORD: enrollmentpass
+    ports:
+      - "41030:5432"
+    volumes:
+      - enrollment_db_data:/var/lib/postgresql/data
+    networks:
+      - lms-network
+
+  learning-db-v1:
+    image: postgres:16-alpine
+    container_name: learning-db-v1
+    environment:
+      POSTGRES_DB: learningdb
+      POSTGRES_USER: learninguser
+      POSTGRES_PASSWORD: learningpass
+    ports:
+      - "41040:5432"
+    volumes:
+      - learning_db_data:/var/lib/postgresql/data
+    networks:
+      - lms-network
+
+  prometheus-v1:
+    image: prom/prometheus:latest
+    container_name: prometheus-v1
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./infra/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - lms-network
+
+  grafana-v1:
+    image: grafana/grafana:latest
+    container_name: grafana-v1
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - lms-network
+
+  jaeger-v1:
+    image: jaegertracing/all-in-one:1.76.0
+    container_name: jaeger-v1
+    environment:
+      COLLECTOR_OTLP_ENABLED: "true"
+    ports:
+      - "16686:16686"
+      - "4317:4317"
+      - "4318:4318"
+    volumes:
+      - jaeger_data:/tmp
+    networks:
+      - lms-network
+
+volumes:
+  identity_db_data:
+  course_db_data:
+  enrollment_db_data:
+  learning_db_data:
+  prometheus_data:
+  grafana_data:
+  jaeger_data:
+
+networks:
+  lms-network:
+    driver: bridge
