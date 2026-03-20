@@ -1,1 +1,3 @@
-# Propiedades de discovery-server-v1 para perfil dev
+eureka:
+  server:
+    wait-time-in-ms-when-sync-empty: 0

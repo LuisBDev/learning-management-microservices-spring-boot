@@ -1,1 +1,9 @@
-# Propiedades base de discovery-server-v1
+server:
+  port: 8761
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+  server:
+    enable-self-preservation: true
