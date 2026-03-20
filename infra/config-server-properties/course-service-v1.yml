@@ -1,1 +1,8 @@
-# Propiedades base de course-service-v1
+server:
+  port: 40020
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
