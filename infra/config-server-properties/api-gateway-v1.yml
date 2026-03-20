@@ -1,1 +1,2 @@
-# Propiedades base de api-gateway-v1
+server:
+  port: 8080
