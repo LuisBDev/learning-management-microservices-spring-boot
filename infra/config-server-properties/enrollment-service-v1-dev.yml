@@ -1,1 +1,13 @@
-# Propiedades de enrollment-service-v1 para perfil dev
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:41030/enrollmentdb
+    username: enrollmentuser
+    password: enrollmentpass
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: false
