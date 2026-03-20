@@ -1,0 +1,9 @@
+spring:
+  config:
+    import: "optional:configserver:http://localhost:8888"
+
+security:
+  jwt:
+    secret-key: ${JWT_SECRET:dGhpcyBpcyBhIHZlcnkgc2VjdXJlIGtleSBmb3IgZGV2ZWxvcG1lbnQgb25seSBkbyBub3QgdXNlIGluIHByb2R1Y3Rpb24=}
+    access-token-expiration: 900000
+    refresh-token-expiration: 604800000
