@@ -1,1 +1,13 @@
-# Propiedades de learning-service-v1 para perfil dev
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:41040/learningdb
+    username: learninguser
+    password: learningpass
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: false

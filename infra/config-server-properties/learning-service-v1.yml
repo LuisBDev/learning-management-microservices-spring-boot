@@ -1,1 +1,8 @@
-# Propiedades base de learning-service-v1
+server:
+  port: 40040
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
