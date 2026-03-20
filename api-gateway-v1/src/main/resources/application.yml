@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: api-gateway-v1
+  profiles:
+    active: dev
