@@ -1,0 +1,12 @@
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/LuisBDev/learning-management-microservices-spring-boot.git
+          default-label: master
+          search-paths: infra/config-server-properties
+          clone-on-start: true
+          force-pull: true
+          username: ${CONFIG_REPO_USERNAME:LuisBDev}
+          password: ${CONFIG_REPO_TOKEN}
