@@ -45,10 +45,19 @@ public class JwtService {
                 .filter(a -> !a.startsWith("ROLE_"))
                 .toList();
 
-        return buildToken(
-                Map.of("roles", roles, "permissions", permissions, "token_type", "access"),
-                userDetails.getUsername(),
-                jwtProperties.getAccessTokenExpiration());
+        String userId = (userDetails instanceof CustomUserDetails customUser)
+                ? customUser.getId().toString()
+                : null;
+
+        Map<String, Object> claims = new java.util.HashMap<>(Map.of(
+                "roles", roles,
+                "permissions", permissions,
+                "token_type", "access"));
+        if (userId != null) {
+            claims.put("user_id", userId);
+        }
+
+        return buildToken(claims, userDetails.getUsername(), jwtProperties.getAccessTokenExpiration());
     }
 
     public String generateRefreshToken(UserDetails userDetails) {

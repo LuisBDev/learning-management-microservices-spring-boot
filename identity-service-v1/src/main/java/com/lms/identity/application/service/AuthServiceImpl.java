@@ -46,15 +46,16 @@ public class AuthServiceImpl implements AuthService {
             throw new EmailAlreadyExistsException(request.getEmail());
         }
 
-        RoleEntity studentRole = roleRepository.findByName("ROLE_STUDENT")
-                .orElseThrow(() -> new ResourceNotFoundException("Role", "name", "ROLE_STUDENT"));
+
+        RoleEntity role = roleRepository.findByName(request.getRole())
+                .orElseThrow(() -> new ResourceNotFoundException("Role", "name", request.getRole()));
 
         UserEntity user = UserEntity.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
-                .roles(Set.of(studentRole))
+                .roles(Set.of(role))
                 .build();
 
         userRepository.save(user);
