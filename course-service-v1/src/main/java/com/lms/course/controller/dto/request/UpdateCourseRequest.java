@@ -1,6 +1,6 @@
 package com.lms.course.controller.dto.request;
 
-import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Getter
@@ -10,10 +10,10 @@ import lombok.*;
 @AllArgsConstructor
 public class UpdateCourseRequest {
 
-    @Max(50)
+    @Size(max = 50, message = "Code must be at most 50 characters")
     private String code;
 
-    @Max(200)
+    @Size(max = 200, message = "Title must be at most 255 characters")
     private String title;
 
     private String summary;
