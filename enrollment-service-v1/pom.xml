@@ -12,10 +12,10 @@
     </parent>
 
     <groupId>com.lms</groupId>
-    <artifactId>course-service-v1</artifactId>
+    <artifactId>enrollment-service-v1</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>course-service-v1</name>
-    <description>LMS Course Service</description>
+    <name>enrollment-service-v1</name>
+    <description>LMS Enrollment Service</description>
 
     <properties>
         <java.version>25</java.version>
@@ -75,8 +75,8 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-flyway</artifactId>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
         </dependency>
 
         <dependency>
@@ -140,7 +140,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-opentelemetry</artifactId>
         </dependency>
-        
+
     </dependencies>
 
     <build>
