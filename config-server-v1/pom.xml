@@ -44,19 +44,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-
-        <!-- Export to Prometheus -->
-        <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-registry-prometheus</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-
-        <!-- Export to OpenTelemetry (para Jaeger, Tempo, OTLP collector, etc.) -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-opentelemetry</artifactId>
-        </dependency>
+        
 
         <dependency>
             <groupId>org.projectlombok</groupId>
