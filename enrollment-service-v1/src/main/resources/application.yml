@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: enrollment-service-v1
+  profiles:
+    active: dev
