@@ -56,6 +56,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     @Transactional(readOnly = true)
     public Page<CourseResponse> getAll(Pageable pageable) {
+        log.info("Get all courses request: {}", pageable);
         return courseRepository.findAll(pageable).map(courseMapper::toResponse);
     }
 

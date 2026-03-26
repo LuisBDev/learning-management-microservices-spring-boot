@@ -13,6 +13,8 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+//TODO: consider if we want to store files in the database or use an external storage (e.g., AWS S3) and just keep metadata in the DB
+//TODO: The implementation logic is pending
 public class AssignmentMaterialFileEntity {
 
     @Id
