@@ -21,6 +21,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ProblemDetail handleValidation(MethodArgumentNotValidException ex) {
+        log.error("Validation error: {}", ex.getMessage());
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(
                 HttpStatus.BAD_REQUEST, "Validation failed for one or more fields");
         problem.setTitle("Validation Error");
@@ -37,6 +38,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ProblemDetail handleNotFound(ResourceNotFoundException ex) {
+        log.error("Resource Not Found", ex.getMessage());
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
         problem.setTitle("Resource Not Found");
         problem.setType(BLANK_TYPE);
@@ -45,6 +47,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DuplicateResourceException.class)
     public ProblemDetail handleDuplicate(DuplicateResourceException ex) {
+        log.error("Conflict: {}", ex.getMessage());
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
         problem.setTitle("Conflict");
         problem.setType(BLANK_TYPE);
@@ -53,6 +56,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidOperationException.class)
     public ProblemDetail handleInvalidOperation(InvalidOperationException ex) {
+        log.error("Error: {}", ex.getMessage());
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage());
         problem.setTitle("Invalid Operation");
         problem.setType(BLANK_TYPE);
