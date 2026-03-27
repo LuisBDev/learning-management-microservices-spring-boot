@@ -1,4 +1,4 @@
-package com.lms.enrollment.infrastructure.client.dto;
+package com.lms.enrollment.infrastructure.client.courseservicev1.dto;
 
 import java.util.UUID;
 

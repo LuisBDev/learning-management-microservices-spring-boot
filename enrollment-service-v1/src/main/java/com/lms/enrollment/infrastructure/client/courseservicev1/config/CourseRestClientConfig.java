@@ -1,4 +1,4 @@
-package com.lms.enrollment.infrastructure.client.config;
+package com.lms.enrollment.infrastructure.client.courseservicev1.config;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;

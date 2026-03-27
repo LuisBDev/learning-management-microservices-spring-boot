@@ -1,7 +1,7 @@
-package com.lms.enrollment.infrastructure.client;
+package com.lms.enrollment.infrastructure.client.courseservicev1;
 
 import com.lms.enrollment.exception.ResourceNotFoundException;
-import com.lms.enrollment.infrastructure.client.dto.CourseResponse;
+import com.lms.enrollment.infrastructure.client.courseservicev1.dto.CourseResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatusCode;
