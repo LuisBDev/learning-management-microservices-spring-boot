@@ -3,42 +3,42 @@ global:
   evaluation_interval: 15s
 
 scrape_configs:
-  - job_name: "config-server-v1"
-    metrics_path: "/actuator/prometheus"
-    static_configs:
-      - targets: ["host.docker.internal:4488"]
+  #  - job_name: "config-server-v1"
+  #    metrics_path: "/actuator/prometheus"
+  #    static_configs:
+  #      - targets: ["host.docker.internal:4488"]
 
   - job_name: "discovery-server-v1"
     metrics_path: "/actuator/prometheus"
     static_configs:
-      - targets: ["host.docker.internal:8761"]
+      - targets: [ "host.docker.internal:8761" ]
 
   - job_name: "api-gateway-v1"
     metrics_path: "/actuator/prometheus"
     static_configs:
-      - targets: ["host.docker.internal:8080"]
+      - targets: [ "host.docker.internal:8080" ]
 
   - job_name: "identity-service-v1"
     metrics_path: "/actuator/prometheus"
     static_configs:
-      - targets: ["host.docker.internal:40010"]
+      - targets: [ "host.docker.internal:40010" ]
 
   - job_name: "course-service-v1"
     metrics_path: "/actuator/prometheus"
     static_configs:
-      - targets: ["host.docker.internal:40020"]
+      - targets: [ "host.docker.internal:40020" ]
 
   - job_name: "enrollment-service-v1"
     metrics_path: "/actuator/prometheus"
     static_configs:
-      - targets: ["host.docker.internal:40030"]
+      - targets: [ "host.docker.internal:40030" ]
 
   - job_name: "learning-service-v1"
     metrics_path: "/actuator/prometheus"
     static_configs:
-      - targets: ["host.docker.internal:40040"]
+      - targets: [ "host.docker.internal:40040" ]
 
   - job_name: "admin-orchestrator-service-v1"
     metrics_path: "/actuator/prometheus"
     static_configs:
-      - targets: ["host.docker.internal:40050"]
+      - targets: [ "host.docker.internal:40050" ]

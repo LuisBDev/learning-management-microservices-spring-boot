@@ -81,14 +81,14 @@ services:
       - lms-network
 
   jaeger-v1:
-    image: jaegertracing/all-in-one:1.76.0
+    image: jaegertracing/all-in-one:1.74.0
     container_name: jaeger-v1
     environment:
       COLLECTOR_OTLP_ENABLED: "true"
     ports:
-      - "16686:16686"
-      - "4317:4317"
-      - "4318:4318"
+      - "16686:16686"  # Jaeger UI
+      - "4318:4318"    # OTLP HTTP (para los microservicios)
+      - "4317:4317"    # OTLP gRPC (opcional)
     volumes:
       - jaeger_data:/tmp
     networks:
