@@ -59,7 +59,13 @@ public class JwtTokenProvider {
                 permissions.forEach(perm -> authorities.add(new SimpleGrantedAuthority(perm)));
             }
 
-            return Optional.of(new JwtAuthenticatedUser(userId, email, authorities));
+            return Optional.of(
+                    JwtAuthenticatedUser.builder()
+                            .userId(userId)
+                            .email(email)
+                            .authorities(authorities)
+                            .build()
+            );
 
         } catch (JwtException | IllegalArgumentException e) {
             log.warn("Invalid JWT token: {}", e.getMessage());
