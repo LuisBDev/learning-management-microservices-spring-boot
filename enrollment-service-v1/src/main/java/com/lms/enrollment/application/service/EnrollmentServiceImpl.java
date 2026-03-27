@@ -10,7 +10,7 @@ import com.lms.enrollment.domain.model.enums.EnrollmentStatus;
 import com.lms.enrollment.exception.DuplicateResourceException;
 import com.lms.enrollment.exception.InvalidOperationException;
 import com.lms.enrollment.exception.ResourceNotFoundException;
-import com.lms.enrollment.infrastructure.client.CourseServiceClient;
+import com.lms.enrollment.infrastructure.client.courseservicev1.CourseServiceClient;
 import com.lms.enrollment.infrastructure.persistence.entity.CourseEnrollmentEntity;
 import com.lms.enrollment.infrastructure.persistence.entity.EnrollmentEventEntity;
 import com.lms.enrollment.infrastructure.persistence.repository.JpaCourseEnrollmentRepository;
