@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -28,6 +29,11 @@ public class GradeController {
     public ResponseEntity<GradeResponse> grade(@Valid @RequestBody GradeSubmissionRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(gradeService.grade(request, SecurityContextHelper.getCurrentUserId()));
+    }
+
+    @GetMapping("/course/{courseId}")
+    public ResponseEntity<List<GradeResponse>> getByCourseId(@PathVariable UUID courseId) {
+        return ResponseEntity.ok(gradeService.getByCourseId(courseId));
     }
 
     @GetMapping("/{id}")

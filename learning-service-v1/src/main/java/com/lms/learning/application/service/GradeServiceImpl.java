@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -108,6 +109,11 @@ public class GradeServiceImpl implements GradeService {
         grade = gradeRepository.save(grade);
         log.info("Grade updated: {} with status {}", id, grade.getGradeStatus());
         return gradeMapper.toResponse(grade);
+    }
+
+    @Override
+    public List<GradeResponse> getByCourseId(UUID courseId) {
+        return gradeRepository.findByCourseId(courseId).stream().map(gradeMapper::toResponse).toList();
     }
 
     private AssignmentGradeEntity findOrThrow(UUID id) {
