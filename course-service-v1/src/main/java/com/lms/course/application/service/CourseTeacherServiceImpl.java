@@ -5,6 +5,7 @@ import com.lms.course.controller.dto.response.CourseTeacherResponse;
 import com.lms.course.controller.mapper.CourseTeacherMapper;
 import com.lms.course.exception.DuplicateResourceException;
 import com.lms.course.exception.ResourceNotFoundException;
+import com.lms.course.infrastructure.client.identityservicev1.IdentityServiceClient;
 import com.lms.course.infrastructure.persistence.entity.CourseEntity;
 import com.lms.course.infrastructure.persistence.entity.CourseTeacherEntity;
 import com.lms.course.infrastructure.persistence.repository.JpaCourseRepository;
@@ -26,13 +27,15 @@ public class CourseTeacherServiceImpl implements CourseTeacherService {
     private final JpaCourseRepository courseRepository;
     private final JpaCourseTeacherRepository teacherRepository;
     private final CourseTeacherMapper teacherMapper;
+    private final IdentityServiceClient identityServiceClient;
 
     @Override
     @Transactional
     public CourseTeacherResponse assign(UUID courseId, AssignTeacherRequest request, UUID assignedBy) {
 
         UUID teacherUserId = request.getTeacherUserId();
-        //TODO: Validate teacherUserId exists in user service via RestClient
+        
+        identityServiceClient.getUserById(teacherUserId);
 
         CourseEntity course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new ResourceNotFoundException("Course", "id", courseId));
