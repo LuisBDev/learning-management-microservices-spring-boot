@@ -1,0 +1,22 @@
+package com.lms.course.infrastructure.client.identityservicev1.config;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestClient;
+
+/**
+ * @author Luis Balarezo
+ **/
+@Configuration
+public class IdentityRestClientConfig {
+
+    @Bean
+    public RestClient identityRestClient(@Qualifier("loadBalancedRestClientBuilder") RestClient.Builder restClientBuilder) {
+        return restClientBuilder
+                .clone()
+                .baseUrl("http://identity-service-v1")
+                .build();
+    }
+
+}
