@@ -1,6 +1,8 @@
 spring:
   cloud:
     gateway:
+      observability:
+        enabled: true
       server:
         webflux:
           discovery:
