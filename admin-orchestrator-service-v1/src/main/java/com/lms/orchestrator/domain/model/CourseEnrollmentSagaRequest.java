@@ -13,9 +13,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CourseEnrollmentSagaRequest {
-    
+
     private String courseCode;
     private String courseName;
-    private String courseDescription;
+    private String courseSummary;
     private List<UUID> studentIds;
 }

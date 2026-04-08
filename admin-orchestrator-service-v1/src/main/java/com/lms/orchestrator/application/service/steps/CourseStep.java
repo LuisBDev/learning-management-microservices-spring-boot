@@ -10,8 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
-
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -27,7 +25,7 @@ public class CourseStep implements SagaStep<CourseSagaContext, CourseSagaContext
         CreateCourseRequest request = CreateCourseRequest.builder()
                 .code(context.getRequest().getCourseCode())
                 .title(context.getRequest().getCourseName())
-                .summary(context.getRequest().getCourseDescription())
+                .summary(context.getRequest().getCourseSummary())
                 .build();
 
         CourseResponse response = courseServiceClient.createCourse(request);
