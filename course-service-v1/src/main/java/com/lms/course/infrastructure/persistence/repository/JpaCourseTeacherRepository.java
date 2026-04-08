@@ -12,6 +12,7 @@ import java.util.UUID;
 @Repository
 public interface JpaCourseTeacherRepository extends JpaRepository<CourseTeacherEntity, UUID> {
     List<CourseTeacherEntity> findByCourseId(UUID courseId);
+    boolean existsByCourseIdAndTeacherUserId(UUID courseId, UUID teacherUserId);
     
     @Modifying
     @Query("DELETE FROM CourseTeacherEntity t WHERE t.course.id = :courseId")

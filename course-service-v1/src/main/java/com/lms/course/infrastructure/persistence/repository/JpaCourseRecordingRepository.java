@@ -6,14 +6,15 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 public interface JpaCourseRecordingRepository extends JpaRepository<CourseRecordingEntity, UUID> {
-    List<CourseRecordingEntity> findByCourseId(UUID courseId);
+    
+    Optional<CourseRecordingEntity> findByResourceUrlId(UUID resourceUrlId);
 
     @Modifying
-    @Query("DELETE FROM CourseRecordingEntity r WHERE r.course.id = :courseId")
+    @Query("DELETE FROM CourseRecordingEntity r WHERE r.resourceUrl.resource.course.id = :courseId")
     void deleteByCourseId(UUID courseId);
 }

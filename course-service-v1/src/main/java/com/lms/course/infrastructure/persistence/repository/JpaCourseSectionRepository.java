@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @Repository
 public interface JpaCourseSectionRepository extends JpaRepository<CourseSectionEntity, UUID> {
-    List<CourseSectionEntity> findByCourseId(UUID courseId);
+    List<CourseSectionEntity> findByCourseIdOrderByPositionAsc(UUID courseId);
 
     @Modifying
     @Query("DELETE FROM CourseSectionEntity s WHERE s.course.id = :courseId")
