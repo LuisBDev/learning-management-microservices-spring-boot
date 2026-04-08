@@ -69,4 +69,10 @@ public class EnrollmentController {
         return ResponseEntity.ok(enrollmentService.getEnrollmentHistory(id));
     }
 
+    @DeleteMapping("/courses/{courseId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteEnrollmentsByCourse(@PathVariable UUID courseId) {
+        enrollmentService.deleteEnrollmentsByCourse(courseId);
+        return ResponseEntity.noContent().build();
+    }
 }

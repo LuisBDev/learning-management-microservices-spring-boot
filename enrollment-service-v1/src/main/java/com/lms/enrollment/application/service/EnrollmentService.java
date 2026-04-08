@@ -26,4 +26,6 @@ public interface EnrollmentService {
 
     List<EnrollmentEventResponse> getEnrollmentHistory(UUID enrollmentId);
 
-}
+    void deleteEnrollmentsByCourse(UUID courseId);
+    }
+

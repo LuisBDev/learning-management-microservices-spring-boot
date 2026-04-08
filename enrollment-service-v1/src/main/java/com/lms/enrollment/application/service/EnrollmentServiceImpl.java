@@ -135,6 +135,15 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     }
 
+    @Override
+    @Transactional
+    public void deleteEnrollmentsByCourse(UUID courseId) {
+        log.info("Deleting all enrollments and history for course: {}", courseId);
+        eventRepository.deleteByCourseId(courseId);
+        enrollmentRepository.deleteByCourseId(courseId);
+        log.info("Successfully deleted enrollments for course: {}", courseId);
+    }
+
     private void recordEvent(CourseEnrollmentEntity enrollment, EnrollmentEventType eventType,
                              EnrollmentStatus previousStatus, EnrollmentStatus newStatus,
                              String detail, UUID triggeredBy) {
