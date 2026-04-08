@@ -5,6 +5,14 @@ spring:
     password: coursepass
     driver-class-name: org.postgresql.Driver
 
+  kafka:
+    bootstrap-servers: localhost:9094
+    consumer:
+      group-id: course-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
   jpa:
     hibernate:
       ddl-auto: validate

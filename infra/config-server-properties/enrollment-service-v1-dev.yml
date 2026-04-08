@@ -3,6 +3,14 @@ spring:
     url: jdbc:postgresql://localhost:41030/enrollmentdb
     username: enrollmentuser
     password: enrollmentpass
+
+  kafka:
+    bootstrap-servers: localhost:9094
+    consumer:
+      group-id: enrollment-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
   jpa:
     hibernate:
       ddl-auto: validate
