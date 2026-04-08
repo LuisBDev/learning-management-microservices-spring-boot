@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
+import java.util.UUID;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -28,5 +30,13 @@ public class EnrollmentServiceClient {
     private EnrollmentResponse enrollStudentFallback(CreateEnrollmentRequest request, Throwable throwable) {
         log.error("Circuit breaker 'enrollment-service' triggered for enrollStudent. Reason: {}", throwable.getMessage());
         throw new RuntimeException("Enrollment service is unavailable. Please try again later.");
+    }
+
+    public void deleteEnrollmentsByCourse(UUID courseId) {
+        log.info("Calling enrollment-service to delete enrollments for course: {}", courseId);
+        enrollmentRestClient.delete()
+                .uri("/api/v1/enrollments/courses/{courseId}", courseId)
+                .retrieve()
+                .toBodilessEntity();
     }
 }
