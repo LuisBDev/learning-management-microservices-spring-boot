@@ -94,6 +94,53 @@ services:
     networks:
       - lms-network
 
+  # Kafka with KRaft
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: kafka-kraft
+    ports:
+      - "9092:9092"
+    environment:
+      # KRaft mode configuration
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:29093
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
+
+      # Listeners configuration
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:29093,PLAINTEXT_INTERNAL://0.0.0.0:29092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://kafka:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT_INTERNAL
+
+      # Topic configuration
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+
+      # Log configuration
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+    volumes:
+      - kafka-kraft-data:/var/lib/kafka/data
+    networks:
+      - lms-network
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui-kraft
+    depends_on:
+      - kafka
+    ports:
+      - "8055:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local-kraft
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
+    volumes:
+      - kafka-ui-kraft-data:/etc/kafkaui
+    networks:
+      - lms-network
+
 volumes:
   identity_db_data:
   course_db_data:
@@ -102,6 +149,8 @@ volumes:
   prometheus_data:
   grafana_data:
   jaeger_data:
+  kafka-kraft-data:
+  kafka-ui-kraft-data:
 
 networks:
   lms-network:
