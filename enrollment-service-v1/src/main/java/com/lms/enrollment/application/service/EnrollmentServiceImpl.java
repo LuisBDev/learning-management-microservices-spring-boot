@@ -11,6 +11,7 @@ import com.lms.enrollment.exception.DuplicateResourceException;
 import com.lms.enrollment.exception.InvalidOperationException;
 import com.lms.enrollment.exception.ResourceNotFoundException;
 import com.lms.enrollment.infrastructure.client.courseservicev1.CourseServiceClient;
+import com.lms.enrollment.infrastructure.client.identityservicev1.IdentityServiceClient;
 import com.lms.enrollment.infrastructure.persistence.entity.CourseEnrollmentEntity;
 import com.lms.enrollment.infrastructure.persistence.entity.EnrollmentEventEntity;
 import com.lms.enrollment.infrastructure.persistence.repository.JpaCourseEnrollmentRepository;
@@ -37,6 +38,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     private final JpaEnrollmentEventRepository eventRepository;
     private final EnrollmentMapper enrollmentMapper;
     private final CourseServiceClient courseServiceClient;
+    private final IdentityServiceClient identityServiceClient;
 
     private static final Map<EnrollmentStatus, Set<EnrollmentStatus>> VALID_TRANSITIONS = Map.of(
             EnrollmentStatus.ACTIVE, Set.of(EnrollmentStatus.SUSPENDED, EnrollmentStatus.CANCELLED),
@@ -53,7 +55,9 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                     "Course " + request.getCourseId() + " does not exist or is not published");
         }
 
-        //TODO: INTER-SERVICE call: verification if student exists in user-service, if not, throw ResourceNotFoundException
+        if (!identityServiceClient.userExists(request.getStudentUserId())) {
+            throw new ResourceNotFoundException("User", "id", request.getStudentUserId());
+        }
 
         if (enrollmentRepository.existsByCourseIdAndStudentUserId(request.getCourseId(), request.getStudentUserId())) {
             throw new DuplicateResourceException(
