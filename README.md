@@ -10,9 +10,9 @@ A production-oriented Learning Management System (LMS) built as a distributed mi
 - [Services Inventory](#services-inventory)
 - [Distributed Transactions (SAGA Pattern)](#distributed-transactions-saga-pattern)
 - [Infrastructure](#infrastructure)
+- [Context Propagation & Observability](#context-propagation--observability)
 - [Security Model](#security-model)
 - [Inter-Service Communication](#inter-service-communication)
-- [Observability](#observability)
 - [Database Strategy](#database-strategy)
 - [Configuration Management](#configuration-management)
 - [API Documentation](#api-documentation)
@@ -194,6 +194,28 @@ Deletes a course and all related data across 3 microservices.
 
 ---
 
+## Context Propagation & Observability
+
+### Distributed Tracing (OTLP)
+- **Library:** Micrometer Tracing with OpenTelemetry (OTel).
+- **Exporting:** Traces are sent via **OTLP HTTP** to Jaeger (`http://localhost:4318/v1/traces`).
+- **Propagation:** Trace IDs are automatically propagated across microservices using W3C headers. This allows end-to-end transaction visibility in Jaeger.
+
+### Metrics & Dashboards
+- **Prometheus:** Services expose metrics at `/actuator/prometheus`.
+- **Grafana:** Dashboards visualize performance, error rates, and Kafka metrics.
+
+### Context Propagation
+The system ensures that both security and operational context are preserved across inter-service calls:
+
+| Context Type          | Mechanism                                              | Purpose                                   |
+|:----------------------|:-------------------------------------------------------|:------------------------------------------|
+| **Security (JWT)**    | `AuthorizationHeaderInterceptor`                       | Propagates User identity and permissions. |
+| **Tracing (B3/W3C)**  | `Micrometer Tracing`                                   | Links spans across microservices.        |
+| **Logging**           | `Slf4j MDC`                                            | Injects `traceId` into every log entry.   |
+
+---
+
 ## Inter-Service Communication
 
 ### Communication Map
@@ -207,22 +229,9 @@ Deletes a course and all related data across 3 microservices.
 
 ---
 
-## Infrastructure
+## Database Strategy
 
-### Docker Compose Services
-
-```
-docker-compose.yml
-  identity-db-v1         PostgreSQL 16 Alpine  :41010
-  course-db-v1           PostgreSQL 16 Alpine  :41020
-  enrollment-db-v1       PostgreSQL 16 Alpine  :41030
-  learning-db-v1         PostgreSQL 16 Alpine  :41040
-  kafka-kraft            Confluent Kafka 7.5   :9092
-  kafka-ui-kraft         Kafka UI              :8055
-  prometheus-v1          Prometheus             :9090
-  grafana-v1             Grafana                :3000
-  jaeger-v1              Jaeger All-in-One      :16686
-```
+**Database per service.** Each business microservice owns its database exclusively. There are no cross-database foreign keys. Integration between bounded contexts is resolved through REST API calls.
 
 ---
 
@@ -235,7 +244,6 @@ docker-compose.yml
 ### Enrollment Service (`/api/v1/enrollments`)
 - `POST /enrollments` -- Enroll student (validates user & course).
 - `DELETE /courses/{courseId}` -- Bulk delete enrollments for a course.
-- `GET /{id}/history` -- Enrollment event log.
 
 ### Learning Service (`/api/v1/learning/courses`)
 - `DELETE /{courseId}` -- Bulk delete all learning data (submissions, grades, files).
@@ -253,7 +261,6 @@ docker-compose.yml
 | **Kafka for Compensation**        | Asynchronous decoupling for rollback actions.                             |
 | **Hard Delete via SAGA**          | Ensures absolute consistency and data cleanup across bounded contexts.    |
 | **Resilience4j Retry**            | High availability for critical physical deletion workflows.                |
-| **Inter-service Validation**      | services validate IDs (User/Course) via REST before processing commands.  |
 | **ProblemDetail (RFC 7807)**      | Standardized error response format across all services.                   |
 
 ---
