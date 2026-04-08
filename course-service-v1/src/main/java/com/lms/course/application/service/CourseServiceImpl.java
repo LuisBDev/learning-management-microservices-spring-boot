@@ -8,7 +8,7 @@ import com.lms.course.domain.model.enums.CourseStatus;
 import com.lms.course.exception.DuplicateResourceException;
 import com.lms.course.exception.ResourceNotFoundException;
 import com.lms.course.infrastructure.persistence.entity.CourseEntity;
-import com.lms.course.infrastructure.persistence.repository.JpaCourseRepository;
+import com.lms.course.infrastructure.persistence.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -24,6 +24,15 @@ import java.util.UUID;
 public class CourseServiceImpl implements CourseService {
 
     private final JpaCourseRepository courseRepository;
+    private final JpaCourseSectionRepository sectionRepository;
+    private final JpaCourseTeacherRepository teacherRepository;
+    private final JpaCourseResourceRepository resourceRepository;
+    private final JpaCourseRecordingRepository recordingRepository;
+    private final JpaAssignmentRepository assignmentRepository;
+    private final JpaAssignmentMaterialFileRepository assignmentMaterialFileRepository;
+    private final JpaResourceFileRepository resourceFileRepository;
+    private final JpaResourceTextRepository resourceTextRepository;
+    private final JpaResourceUrlRepository resourceUrlRepository;
     private final CourseMapper courseMapper;
 
     @Override
@@ -94,8 +103,26 @@ public class CourseServiceImpl implements CourseService {
         if (!courseRepository.existsById(id)) {
             throw new ResourceNotFoundException("Course", "id", id);
         }
+        
+        log.info("Starting physical cascade delete for course: {}", id);
+
+        // 1. Delete granular resource data (deepest level)
+        assignmentMaterialFileRepository.deleteByCourseId(id);
+        assignmentRepository.deleteByCourseId(id);
+        resourceFileRepository.deleteByCourseId(id);
+        resourceTextRepository.deleteByCourseId(id);
+        resourceUrlRepository.deleteByCourseId(id);
+
+        // 2. Delete intermediate entities
+        resourceRepository.deleteByCourseId(id);
+        recordingRepository.deleteByCourseId(id);
+        teacherRepository.deleteByCourseId(id);
+        sectionRepository.deleteByCourseId(id);
+
+        // 3. Delete root entity
         courseRepository.deleteById(id);
-        log.info("Course deleted: {}", id);
+
+        log.info("Successfully deleted course and all its related data: {}", id);
     }
 
     private CourseEntity findCourseOrThrow(UUID id) {
