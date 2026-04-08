@@ -115,11 +115,40 @@ The system follows a microservices architecture where each service is an indepen
 | `course-service-v1`             | 40020 | `course-db-v1`     | Courses, sections, resources, assignments       |
 | `enrollment-service-v1`         | 40030 | `enrollment-db-v1` | Enrollments, status transitions, event history  |
 | `learning-service-v1`           | 40040 | `learning-db-v1`   | Submissions, submission files, grading          |
-| `admin-orchestrator-service-v1` | 40050 | none               | Future orchestration layer (placeholder)        |
+| `admin-orchestrator-service-v1` | 40050 | none               | SAGA orchestration, complex multi-service tasks |
 
 ---
 
-## Project Structure
+## Distributed Transactions (SAGA Pattern)
+
+The `admin-orchestrator-service-v1` implements the **SAGA Pattern (Orchestration-based)** to coordinate distributed transactions across multiple microservices.
+
+### Use Case: Create Course with Enrollment
+
+This SAGA ensures that a course is created and a set of students are enrolled as a single atomic-like operation.
+
+1.  **Step 1 (Course Service):** Create a new course.
+2.  **Step 2 (Enrollment Service):** Enroll students into the newly created course.
+3.  **Compensating Action:** If any enrollment fails, the orchestrator triggers a compensation event via **Kafka** to delete the course created in Step 1, reverting the system to its previous state.
+
+### Messaging with Kafka (KRaft)
+
+Kafka is used for asynchronous communication and compensation triggers:
+- **Topic:** `course-compensation-events`
+- **Producer:** `CourseEnrollmentSagaService` sends a message if enrollment fails.
+- **Consumer:** `CompensationConsumer` listens for these events and calls the Course Service to delete the failed course.
+- **Infrastructure:** Kafka runs in KRaft mode (no Zookeeper) as defined in `docker-compose.yml`.
+
+### Resiliency with Circuit Breaker
+
+All inter-service calls in the orchestrator are protected by **Resilience4j** Circuit Breakers:
+- **Instances:** `course-service`, `enrollment-service`.
+- **Configuration:** Managed via Config Server (`admin-orchestrator-service-v1-dev.yml`).
+- **Behavior:** If a service is down or slow, the circuit opens, preventing further calls and allowing the system to fail fast or provide fallbacks.
+
+---
+
+## Inter-Service Communication
 
 Each business microservice follows a layered architecture inspired by Clean Architecture and lightweight DDD:
 
