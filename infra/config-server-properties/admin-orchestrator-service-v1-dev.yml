@@ -2,7 +2,7 @@
 
 spring:
   kafka:
-    bootstrap-servers: localhost:9094 # For external access
+    bootstrap-servers: localhost:9092 # For external access
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
